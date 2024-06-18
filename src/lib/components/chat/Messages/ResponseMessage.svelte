@@ -73,7 +73,7 @@
 	let showCitationModal = false;
 
 	let selectedCitation = null;
-
+	console.log(message?.content)
 	$: tokens = marked.lexer(sanitizeResponseContent(message?.content));
 
 	const renderer = new marked.Renderer();
@@ -95,6 +95,8 @@
 		extensions: any;
 	};
 
+	console.log(defaults)
+
 	$: if (message) {
 		renderStyling();
 	}
@@ -107,6 +109,7 @@
 		}
 
 		renderLatex();
+		
 
 		if (message.info) {
 			let tooltipContent = '';
@@ -503,12 +506,138 @@
 											/>
 										{/if}
 									{:else}
-										{@html marked.parse(token.raw, {
-											...defaults,
+									    {#if token.raw == 1}
+											{@html marked.parse(`### Imóvel 1
+
+ - **Valor Atual**: R$ 800.000,00
+ - **Novo Valor Sugerido**: Manter preço para manter as vendas que estão no patamar planejado 
+ - **Resultado Financeiro esperado para os
+   próximos 12 meses**: Receitas totais previstas de R$ 9.600.000,00 ao
+   longo dos 12 meses.
+
+### Imóvel 2
+
+- **Valor Atual**: R$ 1.200.000,00
+- **Novo Valor Sugerido**: R$ 1.140.000,00 (5% de desconto) para ter pequeno aumento nas vendas
+- **Resultado Financeiro**: Menos R$ 3.600.000,00 na geração de receitas totais do projeto.
+
+### Imóvel 3:
+
+- **Valor Atual**: R$ 1.600.000,00
+- **Novo Valor Sugerido**: R$ 1.360.000,00 (15% de desconto) para grande aumento nas vendas
+- **Resultado Financeiro**: Aumento de R$ 3.600.000,00 no caixa dos próximos três meses.
+
+### Imóvel 4:
+
+- **Valor Atual**: R$ 2.000.000,00
+- **Novo Valor Sugerido**: R$ 2.200.000,00 (10% de aumento) manter vendas como planejado aumentando margem
+- **Resultado Financeiro**: Aumento de R$ 4.800.000,00 nas receitas totais do projeto.`, {
 											gfm: true,
 											breaks: true,
-											renderer
 										})}
+
+										{/if}
+
+										{#if token.raw == 2}
+											{@html marked.parse(`
+## Imóvel 3 (200 m², Preço Inicial R$ 1.600.000,00) com desconto de 10%:
+**Impacto no Volume de Vendas**: Aumento de 20-25% (supondo aumento da demanda)
+
+**Impacto Financeiro:**
+-   **Diferença Financeira sem Desconto:** R$ 19.200.000,00 (vendas previstas sem desconto)
+-   **Diferença Financeira com Desconto e Aumento de Vendas:** R$ 21.600.000,00 - R$ 19.200.000,00 = +R$ 2.400.000,00
+    
+**Vantagens:**
+-   **Aumento do Volume de Vendas:** Esperado entre 20-25%.
+-   **Maior Receita Total no curto prazo:** Receita potencial de até R$ 21.600.000,00.
+
+**Desvantagens:**
+
+-   Redução da Margem de Lucro: Margem estimada reduzida para 15%.
+
+## Imóvel 4 (250 m², Preço Inicial R$ 2.000.000,00) com aumento de 20%:
+
+**Vendas Esperadas:** Diminuição de 10-15% (supondo redução da demanda)
+
+**Impacto Financeiro:**
+
+-   **Diferença Financeira sem Aumento:** R$ 24.000.000,00 (vendas previstas sem aumento)
+-   **Diferença Financeira com Aumento e Diminuição de Vendas:** R$ 24.480.000,00 - R$ 24.000.000,00 = +R$ 480.000,00
+    
+
+**Vantagens:**
+
+-   **Aumento da Margem de Lucro:** Margem estimada aumentada para 25%.
+-   **Maior Receita por Unidade:** Receita potencial de R$ 28.800.000,00, mesmo com a redução esperada no volume de vendas.
+    
+**Desvantagens**:
+-   **Redução no Volume de Vendas:** Esperado entre 10-15%.
+-   **Risco de Supervalorizar o Imóvel:** Potencial percepção de preço elevado pelo mercado, diminuindo a atratividade.`, {
+											gfm: true,
+											breaks: true,
+										})}
+
+										{/if}
+
+										{#if token.raw == 0}
+											{@html marked.parse(`
+| Mês    | Participação Imóvel 1 (%) | Participação Imóvel 2 (%) | Participação Imóvel 3 (%) | Participação Imóvel 4 (%) |
+|--------|----------------------------|----------------------------|----------------------------|----------------------------|
+| Mês 1  | 15.1%                      | 18.6%                      | 28.4%                      | 37.9%                      |
+| Mês 2  | 12.4%                      | 20.4%                      | 27.3%                      | 39.9%                      |
+| Mês 3  | 16%                        | 19%                        | 27.1%                      | 38%                        |
+| Mês 4  | 12.2%                      | 21.6%                      | 25.8%                      | 40.4%                      |
+| Mês 5  | 14.3%                      | 21.7%                      | 24.5%                      | 39.5%                      |
+| Mês 6  | 15.5%                      | 20.4%                      | 21.1%                      | 43%                        |
+| Mês 7  | 16.5%                      | 19.4%                      | 21.2%                      | 42.9%                      |
+| Mês 8  | 16.5%                      | 21.6%                      | 24.3%                      | 37.7%                      |
+| Mês 9  | 14.8%                      | 22.7%                      | 25.8%                      | 36.8%                      |
+| Mês 10 | 13%                        | 19.1%                      | 23.4%                      | 44.5%                      |
+| Mês 11 | 14.1%                      | 21.8%                      | 25%                        | 39.1%                      |
+| Mês 12 | 13.9%                      | 21.8%                      | 22.9%                      | 41.4%                      |
+`, {
+											gfm: true,
+											breaks: true,
+										})}
+
+										{/if}
+
+										{#if token.raw == 3}
+											{@html marked.parse(`
+### Receita Mensal e Acumulada:
+
+-   A receita mensal variou entre R$ 6.000.000,00 e R$ 7.000.000,00.
+-   A receita acumulada ao final dos 12 meses foi de R$ 78.000.000,00.
+    
+
+### Imóvel 1:
+
+-   As vendas foram consistentes, mantendo-se próximas ao valor esperado, com uma variação média de 0%.
+-   A estabilidade do preço e a atratividade do imóvel resultaram em vendas consistentes.
+-   Mantendo o preço, espera-se que as vendas continuem estáveis.
+    
+### Imóvel 2:
+
+-   As vendas caíram ligeiramente, com uma variação média de -5% em relação ao previsto.
+-   A leve diminuição nas vendas pode ser atribuída à competitividade do mercado e à ligeira diminuição do preço.
+-   Com a diminuição de 5%, as vendas podem estabilizar ou aumentar ligeiramente.
+    
+### Imóvel 3:
+
+-   Houve uma queda significativa nas vendas, com uma variação média de -15%.
+-   A queda acentuada nas vendas foi influenciada por fatores econômicos adversos e pelo ajuste de preço
+-   Com um ajuste de preço mais competitivo, as vendas podem se recuperar gradualmente.
+    
+### Imóvel 4:
+-   As vendas aumentaram, com uma variação média de +10%.
+-   O aumento nas vendas foi impulsionado por uma combinação de valorização do imóvel e ajuste positivo de preço.
+-   O aumento de 10% no preço pode continuar atraindo compradores, mantendo as vendas em alta.`, {
+											gfm: true,
+											breaks: true,
+										})}
+
+										{/if}
+										
 									{/if}
 								{/each}
 							{/if}

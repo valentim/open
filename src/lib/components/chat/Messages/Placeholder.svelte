@@ -92,8 +92,27 @@
 							</div>
 						{/if}
 					{:else}
-						<div class=" font-medium text-gray-400 dark:text-gray-500 line-clamp-1">
-							{$i18n.t('How can I help you today?')}
+						<div class="init font-medium text-gray-400 dark:text-gray-500 ">
+							<p class="updated-date">Pricing da construtora Construtec com dados atualizados em 17/06 23:59<br>
+							<span class="last-change">Última mudança em 02/06 pelo motivo de “aumento da taxa de juros”</span></p>
+						{@html marked.parse(`
+## Receita x Vendas
+- A receita mensal variou entre R$ 6.000.000,00 e R$ 7.000.000,00, acumulando um total de R$ 62.880.000,00 ao longo dos 12 meses. Esta receita foi alcançada com ajustes de preços que, apesar de impactarem negativamente a margem, permitiram manter um volume de vendas alto e constante.
+
+### Positivo
+- As vendas do Imóvel 1 mantiveram-se estáveis ao longo dos 12 meses, gerando uma receita total de R$ 9.600.000,00.
+
+### Demanda Atenção
+- As vendas do Imóvel 2 apresentaram uma leve queda de 5%, gerando uma receita total de R$ 13.680.000,00 em vez dos esperados R$ 14.400.000,00.
+
+### Demanda Muita Atenção
+- As vendas do Imóvel 3 caíram significativamente, com uma variação de -15% em relação ao esperado. A receita gerada foi de R$ 16.320.000,00, comparada com os esperados R$ 19.200.000,00, resultando em uma perda de R$ 2.880.000,00.
+- O Imóvel 4 viu um aumento nas vendas de 10%, gerando uma receita total de R$ 22.800.000,00 em vez dos esperados R$ 24.000.000,00. O preço ajustado para R$ 1.900.000,00 (5% de desconto) foi eficaz em aumentar o volume de vendas, mas resultou em uma receita R$ 1.200.000,00 menor do que o potencial sem desconto.
+`, {
+											gfm: true,
+											breaks: true,
+										})}
+
 						</div>
 					{/if}
 				</div>
@@ -102,10 +121,10 @@
 
 		<div class=" w-full" in:fade={{ duration: 200, delay: 300 }}>
 			<Suggestions
-				suggestionPrompts={models[selectedModelIdx]?.info?.meta?.suggestion_prompts ??
-					$config.default_prompt_suggestions}
+				suggestionPrompts={$config.default_prompt_suggestions}
 				{submitPrompt}
 			/>
 		</div>
+		
 	</div>
 {/key}
